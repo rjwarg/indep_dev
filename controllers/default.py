@@ -9,6 +9,7 @@
 ## - call exposes all registered services (none by default)
 #########################################################################
 from datetime import date
+import time
 
 @auth.requires_membership('indep')
 def index():
@@ -26,7 +27,7 @@ def index():
     return locals()
 @auth.requires_login()
 def get_members():
-    members = db(db.members.last_name.startswith(request.args[0])).select()
+    members_list = db2(db2.member.name.startswith(request.args[0])).select()
     return locals()
 @auth.requires_login()
 def show_ajax():
@@ -71,13 +72,13 @@ def edit_case():
         form.vars.case_number = case_number
         form.vars.member_id = request.args(0)
         form.vars.assigned_to = auth.user.id
-        member = db.members(request.args(0))
+        client = db.client(request.args(0))
         hold = 0
         # insert a new case_action record for the assignment
   
     else:
         case = db.case_master(request.args(0))
-        member = db.members(case.member_id)
+        client = db.client(case.member_id)
         form = SQLFORM(db.case_master, case)
         # get list of actions
         actions = db(db.case_action.case_id == case.id).select()
@@ -96,26 +97,6 @@ def edit_case():
         
     return locals()
 
-def load_db_members():
-    rows = db2(db2.member.stat != 'R').select()
-#    db.members.truncate()
-    insert_count = 0
-    read_count = 0
-    for r in rows:
-        if db(db.members.member_id == r.id_no).count() == 0:
-            db.members.insert(last_name = r.name,
-                          first_name = r.first_name,
-                          minst = r.minst,
-                          address = r.address,
-                          zip = r.zip,
-                          member_id = r.id_no,
-                          stat = r.stat)
-            insert_count += 1
-        if read_count % 500 == 0:
-            response.flash = "Progress Count = " + str(read_count)
-            
-    rows = insert_count
-    return locals()
 
 def name_selector():
     
@@ -123,17 +104,17 @@ def name_selector():
     if not request.vars.last_name: return ''
     
     pattern = request.vars.last_name.upper() + '%' 
-    query = db.members.last_name.like(pattern)
+    query = db2.member.name.like(pattern)
     if request.vars.first_name:
          pattern = request.vars.first_name.upper() + '%' 
-         query &= db.members.first_name.like(pattern)
+         query &= db2.member.first_name.like(pattern)
             
     if request.vars.minst:
          pattern = request.vars.minst.upper() + '%' 
-         query &= db.members.minst.like(pattern)
+         query &= db2.member.minst.like(pattern)
      
-    selected = [{'last_name':row.last_name, 'first_name':row.first_name, 'minst':row.minst, 'id':str(row.id)}for row in
-               db(query).select(orderby=db.members.last_name | db.members.first_name, limitby=(0,25))]
+    selected = [{'last_name':row.name, 'first_name':row.first_name, 'minst':row.minst, 'id':str(row.id_no)}for row in
+               db2(query).select(orderby=db2.member.name | db2.member.first_name, limitby=(0,25))]
 #    return "testing away"
     #db(db.member.name.like(pattern)).select(orderby=db.member.name, limitby=(0, 15))]
     return ''.join([DIV(k['last_name']+', '+k['first_name'] +', '+k['minst'],
@@ -142,6 +123,31 @@ def name_selector():
                        _onmouseout="this.style.backgroundColor='white'"
                        ).xml() for k in selected])
 
+
+def orig_name_selector():
+    
+        
+    if not request.vars.name: return ''
+    
+    pattern = request.vars.name.upper() + '%' 
+    query = db2.member.name.like(pattern)
+    if request.vars.first_name:
+         pattern = request.vars.first_name.upper() + '%' 
+         query &= db2.member.first_name.like(pattern)
+            
+    if request.vars.minst:
+         pattern = request.vars.minst.upper() + '%' 
+         query &= db2.member.minst.like(pattern)
+     
+    selected = [{'last_name':row.name, 'first_name':row.first_name, 'minst':row.minst, 'id':str(row.id_no)}for row in
+               db2(query).select(orderby=db2.member.name | db2.member.first_name, limitby=(0,25))]
+#    return "testing away"
+    #db(db.member.name.like(pattern)).select(orderby=db.member.name, limitby=(0, 15))]
+    return ''.join([DIV(k['last_name']+', '+k['first_name'] +', '+k['minst'],
+                       _onclick="set_text('" +k['last_name']+"','"+k['first_name']+"','"+k['minst']+"','"+k['id']+"')",
+                       _onmouseover="this.style.backgroundColor='yellow'",
+                       _onmouseout="this.style.backgroundColor='white'"
+                       ).xml() for k in selected])
      
 
 def user():

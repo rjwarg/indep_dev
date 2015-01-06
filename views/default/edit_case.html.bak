@@ -1,11 +1,11 @@
 {{extend 'layout.html'}}
 <h1>Case Control</h1>
 
-{{=member.first_name + '  '  + member.last_name + ', '+ member.minst}}<br/>
+{{=client.first_name + '  '  + client.last_name + ', '+ client.minst}}<br/>
 {{=form}}<br/>
 
 {{if hold >0:}}
-{{=A("Add Action", _class='btn', _href=(URL('edit_action', args=(hold, 0))))}}
+{{=A("Add Action", _class='btn', _href=(URL('edit_action', args=(hold, 0L))))}}
 
 <table>
 {{for action in actions:}}

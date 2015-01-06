@@ -1,17 +1,17 @@
 {{extend 'layout.html'}}
 <script>  
-    function set_text(name, first_name, minst, id_no){
-        $("#name").val(name);
+    function set_text(last_name, first_name, minst, id){
+        $("#last_name").val(last_name);
         $("#first_name").val(first_name);
         $("#minst").val(minst);
-        $("#id_no").val(id_no);
+        $("#id").val(id);
     }
         function myclear(){
         
-        $("#name").val('');
+        $("#last_name").val('');
         $("#first_name").val('');
         $("#minst").val('');
-        $("#id_no").val('');
+        $("#id").val('');
         $("#suggestions").html('');
     }
 </script>
@@ -25,10 +25,10 @@
 </button>
 
 <form action=''>
-   <input type='text' id='name' name="name" class='ajax' style="width: 250px"/>
+   <input type='text' id='last_name' name="last_name" class='ajax' style="width: 250px"/>
    <input type='text' id='first_name' name="first_name" class='ajax' style="width: 250px"/>
    <input type='text' id='minst' name="minst" class='ajax' style="width: 250px"/>
-    <input type='text' id='id_no' name="id_no" style="width: 250px"/><br/>
+    <input type='text' id='id' name="id" style="width: 250px"/><br/>
     <button type='submit'>Create Case</button>
     
 </form>
@@ -36,5 +36,5 @@
 <script>
  
     $(".ajax").keyup(function(){
-        ajax('name_selector', ['name', 'first_name', 'minst'], 'suggestions')}); 
+        ajax('orig_name_selector', ['last_name', 'first_name', 'minst'], 'suggestions')}); 
  </script>

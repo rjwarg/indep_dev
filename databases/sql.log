@@ -349,3 +349,25 @@ CREATE TABLE case_master(
     date_closed DATETIME NULL,
     dead_file_box_number VARCHAR(512) NULL
 );
+timestamp: 2015-01-05T11:06:35.136849
+CREATE TABLE client(
+    id INT IDENTITY PRIMARY KEY,
+    last_name VARCHAR(512) NULL,
+    first_name VARCHAR(512) NULL,
+    minst VARCHAR(512) NULL,
+    address VARCHAR(512) NULL,
+    zip VARCHAR(512) NULL,
+    member_id INT NULL,
+    stat VARCHAR(512) NULL
+);
+timestamp: 2015-01-05T11:09:52.688605
+CREATE TABLE client(
+    id INT IDENTITY PRIMARY KEY,
+    last_name VARCHAR(512) NULL,
+    first_name VARCHAR(512) NULL,
+    minst VARCHAR(512) NULL,
+    address VARCHAR(512) NULL,
+    zip VARCHAR(512) NULL,
+    member_id INT NULL,
+    stat VARCHAR(512) NULL
+);

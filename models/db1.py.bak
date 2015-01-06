@@ -1,5 +1,5 @@
 # coding: utf8
-db.define_table('members',
+db.define_table('client',
                 Field('last_name', 'string'),
                 Field('first_name','string'),
                 Field('minst', 'string'),
@@ -8,7 +8,7 @@ db.define_table('members',
                 Field('member_id', 'integer'),
                 Field('stat','string'),
  #               auth.signature
-                migrate = False)
+                migrate = True)
 
 db.define_table('case_action_master',
                 Field('action_name'),
@@ -21,11 +21,12 @@ db.define_table('case_action_master',
 
 db.define_table('case_master',
                 Field('case_number'),
-                Field('member_id', 'reference members', ondelete='NO ACTION'),
+                Field('member_id', 'reference client', ondelete='NO ACTION'),
                 Field('description','text'),
                 Field('date_assigned', 'date'),
                 Field('date_closed','date'),
                 Field('dead_file_box_number'),
+                Field('assigned_to', 'reference auth_user', ondelete='NO ACTION'),
                
 #                auth.signature,
                 
@@ -48,23 +49,8 @@ db2.define_table('member',
                  Field('minst', 'string', 'length=7'),
                  Field('address','string', 'length=35'),
                  Field('zip','string', 'length=10'),
+                 Field('phone','string', 'length=13'),
+                 Field('email','string', 'length= 50'),
                  Field('stat','string','length=3'),
                  primarykey = ['id_no'],
                  migrate = False)
-
-
-'''
-from gluon.contrib.populate import populate
-if db(db.auth_user).count() <2:
-    populate(db.auth_user, 10)
-    db.commit()
-    
-
-if db(db.members).count() < 2:
-    populate(db.members, 500)
-    db.commit()
-
-if db(db.case_master).count()<2:
-    populate(db.case_master, 10)
-    db.commit()
-'''
