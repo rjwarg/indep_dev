@@ -25,8 +25,6 @@ response.google_analytics_id = None
 response.menu = [
     (T('Home'), False, URL('default', 'index'), []),
     (T('Reports'), False, URL('reports', 'action_rpt'),[]),
-    (T('Actions'), False, URL('default','load_db_members'),
-    [(T('Update Member Data'),False, URL('default', 'load_db_members'))]),
      ]
 
 DEVELOPMENT_MENU = True

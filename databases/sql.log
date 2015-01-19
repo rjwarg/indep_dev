@@ -371,3 +371,153 @@ CREATE TABLE client(
     member_id INT NULL,
     stat VARCHAR(512) NULL
 );
+timestamp: 2015-01-06T13:41:31.667279
+CREATE TABLE client(
+    last_name VARCHAR(512) NULL,
+    first_name VARCHAR(512) NULL,
+    minst VARCHAR(512) NULL,
+    address VARCHAR(512) NULL,
+    zip VARCHAR(512) NULL,
+    member_id INT NOT NULL,
+    stat VARCHAR(512) NULL,
+    PRIMARY KEY CLUSTERED (member_id)) ;
+timestamp: 2015-01-06T13:41:33.982682
+CREATE TABLE client(
+    last_name VARCHAR(512) NULL,
+    first_name VARCHAR(512) NULL,
+    minst VARCHAR(512) NULL,
+    address VARCHAR(512) NULL,
+    zip VARCHAR(512) NULL,
+    member_id INT NOT NULL,
+    stat VARCHAR(512) NULL,
+    PRIMARY KEY CLUSTERED (member_id)) ;
+timestamp: 2015-01-06T13:41:35.881680
+CREATE TABLE client(
+    last_name VARCHAR(512) NULL,
+    first_name VARCHAR(512) NULL,
+    minst VARCHAR(512) NULL,
+    address VARCHAR(512) NULL,
+    zip VARCHAR(512) NULL,
+    member_id INT NOT NULL,
+    stat VARCHAR(512) NULL,
+    PRIMARY KEY CLUSTERED (member_id)) ;
+timestamp: 2015-01-06T13:46:45.594653
+CREATE TABLE client(
+    last_name VARCHAR(512) NULL,
+    first_name VARCHAR(512) NULL,
+    minst VARCHAR(512) NULL,
+    address VARCHAR(512) NULL,
+    zip VARCHAR(512) NULL,
+    member_id INT NOT NULL,
+    stat VARCHAR(512) NULL,
+    PRIMARY KEY CLUSTERED (member_id)) ;
+faked!
+timestamp: 2015-01-06T13:46:45.600699
+CREATE TABLE case_master(
+    id INT IDENTITY PRIMARY KEY,
+    case_number VARCHAR(512) NULL,
+    member_id INT, CONSTRAINT FK_case_master_member_id__constraint FOREIGN KEY (member_id) REFERENCES client (member_id) ON DELETE NO ACTION,
+    description TEXT NULL,
+    date_assigned DATETIME NULL,
+    date_closed DATETIME NULL,
+    dead_file_box_number VARCHAR(512) NULL,
+    assigned_to INT NULL, CONSTRAINT case_master_assigned_to__constraint FOREIGN KEY (assigned_to) REFERENCES auth_user (id) ON DELETE NO ACTION
+);
+timestamp: 2015-01-06T13:46:46.759243
+CREATE TABLE case_master(
+    id INT IDENTITY PRIMARY KEY,
+    case_number VARCHAR(512) NULL,
+    member_id INT, CONSTRAINT FK_case_master_member_id__constraint FOREIGN KEY (member_id) REFERENCES client (member_id) ON DELETE NO ACTION,
+    description TEXT NULL,
+    date_assigned DATETIME NULL,
+    date_closed DATETIME NULL,
+    dead_file_box_number VARCHAR(512) NULL,
+    assigned_to INT NULL, CONSTRAINT case_master_assigned_to__constraint FOREIGN KEY (assigned_to) REFERENCES auth_user (id) ON DELETE NO ACTION
+);
+timestamp: 2015-01-06T13:46:47.858778
+CREATE TABLE case_master(
+    id INT IDENTITY PRIMARY KEY,
+    case_number VARCHAR(512) NULL,
+    member_id INT, CONSTRAINT FK_case_master_member_id__constraint FOREIGN KEY (member_id) REFERENCES client (member_id) ON DELETE NO ACTION,
+    description TEXT NULL,
+    date_assigned DATETIME NULL,
+    date_closed DATETIME NULL,
+    dead_file_box_number VARCHAR(512) NULL,
+    assigned_to INT NULL, CONSTRAINT case_master_assigned_to__constraint FOREIGN KEY (assigned_to) REFERENCES auth_user (id) ON DELETE NO ACTION
+);
+timestamp: 2015-01-06T13:46:50.593327
+CREATE TABLE case_master(
+    id INT IDENTITY PRIMARY KEY,
+    case_number VARCHAR(512) NULL,
+    member_id INT, CONSTRAINT FK_case_master_member_id__constraint FOREIGN KEY (member_id) REFERENCES client (member_id) ON DELETE NO ACTION,
+    description TEXT NULL,
+    date_assigned DATETIME NULL,
+    date_closed DATETIME NULL,
+    dead_file_box_number VARCHAR(512) NULL,
+    assigned_to INT NULL, CONSTRAINT case_master_assigned_to__constraint FOREIGN KEY (assigned_to) REFERENCES auth_user (id) ON DELETE NO ACTION
+);
+timestamp: 2015-01-06T13:47:23.460518
+CREATE TABLE case_master(
+    id INT IDENTITY PRIMARY KEY,
+    case_number VARCHAR(512) NULL,
+    member_id INT, CONSTRAINT FK_case_master_member_id__constraint FOREIGN KEY (member_id) REFERENCES client (member_id) ON DELETE NO ACTION,
+    description TEXT NULL,
+    date_assigned DATETIME NULL,
+    date_closed DATETIME NULL,
+    dead_file_box_number VARCHAR(512) NULL,
+    assigned_to INT NULL, CONSTRAINT case_master_assigned_to__constraint FOREIGN KEY (assigned_to) REFERENCES auth_user (id) ON DELETE NO ACTION
+);
+timestamp: 2015-01-06T13:50:54.493378
+CREATE TABLE case_master(
+    id INT IDENTITY PRIMARY KEY,
+    case_number VARCHAR(512) NULL,
+    member_id INT, CONSTRAINT FK_case_master_member_id__constraint FOREIGN KEY (member_id) REFERENCES client (member_id) ON DELETE NO ACTION,
+    description TEXT NULL,
+    date_assigned DATETIME NULL,
+    date_closed DATETIME NULL,
+    dead_file_box_number VARCHAR(512) NULL,
+    assigned_to INT NULL, CONSTRAINT case_master_assigned_to__constraint FOREIGN KEY (assigned_to) REFERENCES auth_user (id) ON DELETE NO ACTION
+);
+timestamp: 2015-01-06T14:02:16.818512
+CREATE TABLE xclient(
+    last_name VARCHAR(512) NULL,
+    first_name VARCHAR(512) NULL,
+    minst VARCHAR(512) NULL,
+    address VARCHAR(512) NULL,
+    zip VARCHAR(512) NULL,
+    member_id INT NOT NULL,
+    stat VARCHAR(512) NULL,
+    PRIMARY KEY CLUSTERED (member_id)) ;
+success!
+timestamp: 2015-01-06T14:05:38.056824
+CREATE TABLE mclient(
+    last_name VARCHAR(512) NULL,
+    first_name VARCHAR(512) NULL,
+    minst VARCHAR(512) NULL,
+    address VARCHAR(512) NULL,
+    zip VARCHAR(512) NULL,
+    member_id INT NOT NULL,
+    stat VARCHAR(512) NULL,
+    PRIMARY KEY CLUSTERED (member_id)) ;
+success!
+timestamp: 2015-01-06T14:07:12.565447
+CREATE TABLE case_master(
+    id INT IDENTITY PRIMARY KEY,
+    case_number VARCHAR(512) NULL,
+    member_id INT, CONSTRAINT FK_case_master_member_id__constraint FOREIGN KEY (member_id) REFERENCES mclient (member_id) ON DELETE NO ACTION,
+    description TEXT NULL,
+    date_assigned DATETIME NULL,
+    date_closed DATETIME NULL,
+    dead_file_box_number VARCHAR(512) NULL,
+    assigned_to INT NULL, CONSTRAINT case_master_assigned_to__constraint FOREIGN KEY (assigned_to) REFERENCES auth_user (id) ON DELETE NO ACTION
+);
+success!
+timestamp: 2015-01-06T14:08:08.369961
+CREATE TABLE case_action(
+    id INT IDENTITY PRIMARY KEY,
+    case_id INT NULL, CONSTRAINT case_action_case_id__constraint FOREIGN KEY (case_id) REFERENCES case_master (id) ON DELETE CASCADE,
+    action_id INT NULL, CONSTRAINT case_action_action_id__constraint FOREIGN KEY (action_id) REFERENCES case_action_master (id) ON DELETE CASCADE,
+    date_performed DATETIME NULL,
+    remarks TEXT NULL
+);
+success!

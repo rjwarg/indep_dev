@@ -17,7 +17,7 @@ if not request.env.web2py_runtime_gae:
     db1 = DAL('sqlite://storage.sqlite',pool_size=1,check_reserved=['all'])
     db2 = DAL('informix://informix:'+ifxpw+'@ccpoa_dev/ccpoa')
     db3 = DAL('mssql://django:'+mssqlpw+'@TEST-SQL-SERVER/DEVEL?Driver={FreeTDS}')
-    db = DAL('mssql://web2py:'+mssqlpw+'@TEST-SQL-SERVER/web2py?Driver={FreeTDS}')
+    db = DAL('mssql://web2py:'+mssqlpw+'@TEST-SQL-SERVER/web2py_dev?Driver={FreeTDS}')
 else:
     ## connect to Google BigTable (optional 'google:datastore://namespace')
     db = DAL('google:datastore')

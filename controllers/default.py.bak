@@ -63,16 +63,36 @@ def edit_action():
         response.flash = 'please fill in the form'
     return locals()
 
+def insert_client(member_id):
+    # is there already a client record for this member?
+    client = db(db.client.member_id == member_id).select().first()
+    if client == None:
+        # get the member data
+        member = db2(db2.member.id_no == member_id).select().first()
+        db.client.insert(member_id = member_id, 
+                         last_name = member.name, 
+                         first_name = member.first_name,
+                         minst = member.minst,
+                         address = member.address,
+                         zip = member.zip,
+                         stat = member.stat)
+        client = db(db.client.member_id == member_id).select().first()
+    return client
+
+
 def edit_case():
     testing = "testing"
     case_number = request.args(1)
     if case_number == 'new':
         case_number = new_case_number()
+        # create a new client record from the member master table
         form = SQLFORM(db.case_master)
         form.vars.case_number = case_number
         form.vars.member_id = request.args(0)
         form.vars.assigned_to = auth.user.id
-        client = db.client(request.args(0))
+#        client = db.client( request.args(0))
+#        client = db(db.client.member_id == request.args(0)).select().first()
+        client = insert_client(request.args(0))
         hold = 0
         # insert a new case_action record for the assignment
   
@@ -113,12 +133,12 @@ def name_selector():
          pattern = request.vars.minst.upper() + '%' 
          query &= db2.member.minst.like(pattern)
      
-    selected = [{'last_name':row.name, 'first_name':row.first_name, 'minst':row.minst, 'id':str(row.id)}for row in
+    selected = [{'last_name':row.name, 'first_name':row.first_name, 'minst':row.minst, 'member_id':str(row.id_no)}for row in
                db2(query).select(orderby=db2.member.name | db2.member.first_name, limitby=(0,25))]
 #    return "testing away"
     #db(db.member.name.like(pattern)).select(orderby=db.member.name, limitby=(0, 15))]
     return ''.join([DIV(k['last_name']+', '+k['first_name'] +', '+k['minst'],
-                       _onclick="set_text('" +k['last_name']+"','"+k['first_name']+"','"+k['minst']+"','"+k['id']+"')",
+                       _onclick="set_text('" +k['last_name']+"','"+k['first_name']+"','"+k['minst']+"','"+k['member_id']+"')",
                        _onmouseover="this.style.backgroundColor='yellow'",
                        _onmouseout="this.style.backgroundColor='white'"
                        ).xml() for k in selected])

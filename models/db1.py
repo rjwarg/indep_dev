@@ -1,5 +1,5 @@
 # coding: utf8
-db.define_table('client',
+db.define_table('mclient',
                 Field('last_name', 'string'),
                 Field('first_name','string'),
                 Field('minst', 'string'),
@@ -8,7 +8,9 @@ db.define_table('client',
                 Field('member_id', 'integer'),
                 Field('stat','string'),
  #               auth.signature
-                migrate = False)
+                primarykey = ['member_id'],
+                migrate = True
+                )
 
 db.define_table('case_action_master',
                 Field('action_name'),
@@ -21,7 +23,7 @@ db.define_table('case_action_master',
 
 db.define_table('case_master',
                 Field('case_number'),
-                Field('member_id', 'reference client', ondelete='NO ACTION'),
+                Field('member_id', 'reference mclient', ondelete='NO ACTION'),
                 Field('description','text'),
                 Field('date_assigned', 'date'),
                 Field('date_closed','date'),
@@ -30,7 +32,7 @@ db.define_table('case_master',
                
 #                auth.signature,
                 
-                migrate = False
+#                migrate = False
  )
 
 db.define_table('case_action',
@@ -39,7 +41,7 @@ db.define_table('case_action',
                 Field('date_performed', 'date'),
                 Field('remarks', 'text'),
  #               auth.signature,
-                migrate = False
+#                migrate = False
  )
 
 db2.define_table('member',
