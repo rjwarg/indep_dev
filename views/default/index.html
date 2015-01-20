@@ -12,8 +12,8 @@
 
 {{for row in rows:}}
     <tr>
-        <td>{{=row.id}}</td>
-        <td>{{=A(row.case_number, _href=(URL('edit_case', args=(row.id, row.case_number))))}}</td>
+        
+        <td>{{=A(row.case_number, _href=(URL('edit_case', args=( row.case_number))))}}</td>
         <td>{{=row.member_id.last_name}}</td> 
         <td>{{=row.member_id.first_name}}</td>
         <td>{{=row.description}}</td>

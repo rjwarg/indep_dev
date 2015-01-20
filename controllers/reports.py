@@ -6,7 +6,8 @@ def index(): return dict(message="hello from reports.py")
 
 def cases_pdf():
     
-    db_rows = db(db.case_master.assigned_to == auth.user.id).select()
+#    db_rows = db(db.case_master.assigned_to == auth.user.id).select()
+    db_rows = db(db.case_master).select()
     response.title = "Indep Counsel's Cases"
     
    
@@ -54,6 +55,7 @@ def cases_pdf():
             pdf.cell(35,5,row.member_id.last_name,1,fill=filler)
             pdf.cell(25,5,str(row.date_assigned),1,fill=filler)
             pdf.multi_cell(95,5,row.description,border=1,fill=filler )
+            pdf.ln(5)
             filler = not filler
 
        

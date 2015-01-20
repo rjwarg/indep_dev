@@ -521,3 +521,5 @@ CREATE TABLE case_action(
     remarks TEXT NULL
 );
 success!
+timestamp: 2015-01-19T09:39:00.819128
+ALTER TABLE case_master ADD case_number__tmp VARCHAR(512) NOT NULL;
