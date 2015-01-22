@@ -523,3 +523,13 @@ CREATE TABLE case_action(
 success!
 timestamp: 2015-01-19T09:39:00.819128
 ALTER TABLE case_master ADD case_number__tmp VARCHAR(512) NOT NULL;
+success!
+timestamp: 2015-01-22T07:57:00.702679
+CREATE TABLE case_action(
+    id INT IDENTITY PRIMARY KEY,
+    case_id VARCHAR(512), CONSTRAINT FK_case_action_case_id__constraint FOREIGN KEY (case_id) REFERENCES case_master (case_number) ON DELETE CASCADE,
+    action_id VARCHAR(512), CONSTRAINT FK_case_action_action_id__constraint FOREIGN KEY (action_id) REFERENCES case_action_master (action_name) ON DELETE CASCADE,
+    date_performed DATETIME NULL,
+    remarks TEXT NULL
+);
+faked!

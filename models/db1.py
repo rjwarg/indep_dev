@@ -16,7 +16,6 @@ db.define_table('case_action_master',
                 Field('action_name'),
                 Field('action_value'),
  #               auth.signature,
-                primarykey = ['action_name'],
                 migrate = False
 )
 
@@ -32,7 +31,6 @@ db.define_table('case_master',
                 Field('assigned_to', 'reference auth_user', ondelete='NO ACTION'),
                
 #                auth.signature,
-                primarykey = ['case_number'],
                 migrate = False
  )
 
@@ -41,7 +39,6 @@ db.define_table('case_action',
                 Field('action_id', 'reference case_action_master'),
                 Field('date_performed', 'date'),
                 Field('remarks', 'text'),
-                primarykey = ['case_id','action_id'],
  #               auth.signature,
                 migrate = False
  )

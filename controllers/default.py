@@ -11,6 +11,9 @@
 from datetime import date
 import time
 
+# global client record
+global_client = ""
+
 @auth.requires_membership('indep')
 def index():
     u = auth.user
@@ -38,19 +41,20 @@ def show_ajax():
 
 def edit_action():
     db.case_action.action_id.requires = IS_IN_DB(db,'case_action_master.id', '%(action_name)s')
-    action_id = request.args(1)
-    if action_id == '0':
+    action_record_id = request.args(1)
+    if action_record_id == '0':
         form = SQLFORM(db.case_action)
         form.vars.case_id = request.args(0)
         case_id_name = db.case_master(request.args(0)).case_number
         form.vars.action_id = request.args(1)
         hold = [request.args(1), action_id, "new", case_id_name]
     else:
-        action = db.case_action(action_id)
-        case_id_name = db.case_master(action.case_id).case_number
+        action = db.case_action(action_record_id)
+#        case_id_name = db.case_master(action.case_id).case_number
+        case_id_name = action.case_id.case_number 
         form = SQLFORM(db.case_action, action)
-        hold = [request.args(1), action_id, "existing"]
-    case_id_name         
+        
+        hold = [request.args(1), action, "existing"]
     if form.process(session=None, formname='indep').accepted:
         response.flash = 'form accepted'
         if request.env.http_referrer:
@@ -61,6 +65,9 @@ def edit_action():
         response.flash = 'form has errors'
     else:
         response.flash = 'please fill in the form'
+    
+    client = db.mclient(db.case_master(request.args(1)).member_id)
+    client_name = client.first_name + " " + client.last_name
     return locals()
 
 def insert_client(member_id):
@@ -81,6 +88,8 @@ def insert_client(member_id):
 
 
 def edit_case():
+    hold = 0
+    rq = ""
     testing = "testing"
     case_number = request.args(1)
     if case_number == 'new':
@@ -97,12 +106,14 @@ def edit_case():
         # insert a new case_action record for the assignment
   
     else:
-        case = db.case_master(request.args(0))
+        rq = request
+        case_number = request.args(0)
+        case = db(db.case_master.case_number == case_number).select().first()
         client = db.mclient(case.member_id)
         form = SQLFORM(db.case_master, case)
         # get list of actions
-        actions = db(db.case_action.case_id == case.id).select()
-        hold = case.id
+        actions = db(db.case_action.case_id == case).select()
+        hold = case.case_number
         
     if form.process(session=None, formname='indep').accepted:
         response.flash = 'form accepted'
@@ -114,6 +125,8 @@ def edit_case():
         response.flash = 'form has errors'
     else:
         response.flash = 'please fill in the form'
+        
+    
         
     return locals()
 
