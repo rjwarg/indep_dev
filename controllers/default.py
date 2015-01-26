@@ -19,10 +19,10 @@ def index():
     u = auth.user
     response.flash = "who is logged in? " + u.first_name + " " + u.last_name + " " +str( u.id)
     if request.args(0) == None:
-        rows = db(db.case_master.date_closed == None and db.case_master.assigned_to == u.id).select()
+        rows = db((db.case_master.date_closed == None) & (db.case_master.assigned_to == u.id)).select()
         case_type = "Active"
     elif request.args(0) == 'C':
-        rows = db(db.case_master.date_closed and db.case_master.assigned_to == u.id).select()      
+        rows = db((db.case_master.date_closed != None) & (db.case_master.assigned_to == u.id)).select()      
         case_type = "Closed"
     else:
         rows = db(db.case_master and db.case_master.assigned_to == u.id).select()
