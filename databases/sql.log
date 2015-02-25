@@ -533,3 +533,42 @@ CREATE TABLE case_action(
     remarks TEXT NULL
 );
 faked!
+timestamp: 2015-02-02T13:12:21.158537
+CREATE TABLE auth_user(
+    id INT IDENTITY PRIMARY KEY,
+    first_name VARCHAR(128) NULL,
+    last_name VARCHAR(128) NULL,
+    email VARCHAR(512) NULL,
+    username VARCHAR(128) NULL,
+    password VARCHAR(512) NULL,
+    registration_key VARCHAR(512) NULL,
+    reset_password_key VARCHAR(512) NULL,
+    registration_id VARCHAR(512) NULL
+);
+timestamp: 2015-02-05T08:46:05.240396
+CREATE TABLE adverse_witness(
+    id INT IDENTITY PRIMARY KEY,
+    case_action_id INT NULL, CONSTRAINT adverse_witness_case_action_id__constraint FOREIGN KEY (case_action_id) REFERENCES case_action (id) ON DELETE CASCADE,
+    member_id INT NULL,
+    first_name VARCHAR(512) NULL,
+    last_name VARCHAR(512) NULL,
+    assigned_to INT NULL, CONSTRAINT adverse_witness_assigned_to__constraint FOREIGN KEY (assigned_to) REFERENCES auth_user (id) ON DELETE CASCADE
+);
+success!
+timestamp: 2015-02-09T14:59:31.964761
+ALTER TABLE adverse_witness ADD remarks VARCHAR(512) NULL;
+success!
+timestamp: 2015-02-10T11:59:33.210595
+ALTER TABLE adverse_witness ADD case_id INT NULL; ALTER TABLE adverse_witness ADD CONSTRAINT adverse_witness_case_id__constraint FOREIGN KEY (case_id) REFERENCES case_master (id) ON DELETE CASCADE;
+timestamp: 2015-02-10T12:00:58.435818
+ALTER TABLE adverse_witness ADD case_id INT NULL;
+success!
+success!
+success!
+timestamp: 2015-02-10T14:27:13.900065
+ALTER TABLE adverse_witness DROP COLUMN case_action_id;
+timestamp: 2015-02-10T14:30:32.168634
+ALTER TABLE adverse_witness DROP COLUMN case_action_id;
+timestamp: 2015-02-10T14:32:00.631792
+ALTER TABLE adverse_witness DROP COLUMN case_action_id;
+success!

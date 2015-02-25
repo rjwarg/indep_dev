@@ -24,8 +24,19 @@ response.google_analytics_id = None
 
 response.menu = [
     (T('Home'), False, URL('default', 'index'), []),
-    (T('Reports'), False, URL('reports', 'action_rpt'),[]),
-     ]
+    (T('Reports'), False, '', 
+    [
+         ('Case Reports', False, '', 
+         [
+            ('Active',False, URL('reports','case_rpt', args=('Active')),[]),
+            ('Closed', False,URL('reports','case_rpt', args=('Closed')),[]),
+            ('All', False, URL('reports','case_rpt', args=('All')), []),
+            ('By Client',False,URL('reports','case_rpt', args=('Client')),[])
+         ]),     
+         ('Activity by Date', False, URL('reports', 'action_rpt'),[]),
+         ('Adverse Witnesses', False, URL('reports', 'adv_wit_list'),[])
+])
+]
 
 DEVELOPMENT_MENU = True
 

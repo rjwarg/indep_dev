@@ -45,6 +45,7 @@
   response.files.insert(1,URL('static','css/bootstrap.min.css'))
   response.files.insert(2,URL('static','css/bootstrap-responsive.min.css'))
   response.files.insert(3,URL('static','css/web2py_bootstrap.css'))
+  response.files.insert(4,URL('static','css/ccpoa.css'))
   }}
 
   {{include 'web2py_ajax.html'}}
@@ -133,13 +134,13 @@
     <!-- Footer ================================================== -->
     <div class="row">
         <footer class="footer span12" id="footer">
-            <div class="footer-content">
-                {{block footer}} <!-- this is default footer -->
-                <div class="copyright pull-left">{{=T('Copyright')}} &#169; {{=request.now.year}}</div>
+           <div class="footer-content">
+               {{block footer}} <!-- this is default footer -->
+<!--                <div class="copyright pull-left">{{=T('Copyright')}} &#169; {{=request.now.year}}</div>
                 <div id="poweredBy" class="pull-right">
                     {{=T('Powered by')}}
                     <a href="http://www.web2py.com/">web2py</a>
-                </div>
+                </div> -->
                 {{end}}
             </div>
         </footer>
@@ -166,4 +167,3 @@
   <script src="{{=URL('static','js/share.js',vars=dict(static=URL('static','images')))}}"></script>
 </body>
 </html>
-

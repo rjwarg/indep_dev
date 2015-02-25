@@ -43,6 +43,16 @@ db.define_table('case_action',
                 migrate = False
  )
 
+db.define_table('adverse_witness',
+                Field('case_id', 'reference case_master', ondelete='NO ACTION'),
+                Field('member_id', 'integer'),
+                Field('first_name'),
+                Field('last_name'),
+                Field('remarks'),
+                Field('assigned_to', 'reference auth_user'),
+                fake_migrate = True
+                )
+
 db2.define_table('member',
                  Field('id_no','integer'),
                  Field('name', 'string','length=21'),

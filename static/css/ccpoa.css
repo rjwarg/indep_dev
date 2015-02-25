@@ -1,0 +1,24 @@
+/*
+file: ccpoa.css
+auth: dick warg
+date: 16feb2015
+func: special formatting for indep project
+*/
+
+div.top {
+         background-color: #ffdddd;
+    }
+
+div.left{
+    background-color: #ddffdd;
+    width: 40%;
+    border: 2px solid black;
+    float: left;
+}
+
+div.right{
+    background-color: #ddddff;
+    width: 40%;
+    border: 2px solid black;
+    text-align: left;
+}

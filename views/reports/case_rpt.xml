@@ -1,0 +1,9 @@
+{{
+try:
+   from gluon.serializers import xml
+   response.write(xml(response._vars),escape=False)
+   response.headers['Content-Type']='application/vnd.ms-excel'
+  
+except:
+   raise HTTP(405,'no xml')
+}}

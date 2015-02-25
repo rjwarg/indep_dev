@@ -47,11 +47,11 @@ response.generic_patterns = ['*'] if request.is_local else []
 #########################################################################
 
 from gluon.tools import Auth, Crud, Service, PluginManager, prettydate
-auth = Auth(db)
+auth = Auth(db, hmac_key = Auth.get_or_create_key())
 crud, service, plugins = Crud(db), Service(), PluginManager()
 
 ## create all tables needed by auth if not custom tables
-auth.define_tables(migrate=False)
+auth.define_tables( username=True)
 
 ## configure email
 mail = auth.settings.mailer
@@ -88,3 +88,18 @@ use_janrain(auth, filename='private/janrain.key')
 
 ## after defining tables, uncomment below to enable auditing
 # auth.enable_record_versioning(db)
+auth.settings.actions_disabled = ['register','change_password','request_reset_password','retrieve_username','profile']
+auth.settings.remember_me_form = False
+
+from gluon.contrib.login_methods.ldap_auth import ldap_auth
+auth.settings.login_methods = [ldap_auth(mode='ad',
+   server='SACTO-DC03',
+   manage_groups = True,
+   db = db,
+#   allowed_groups = ['TestGroup'],
+   base_dn='dc=ccpoa,dc=org',
+   group_dn = 'ou=ManagedObjects,dc=ccpoa,dc=org',
+   group_name_attrib = 'cn',
+   group_member_attrib = 'member',
+   group_filterstr = 'objectClass=*'
+   )]

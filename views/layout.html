@@ -45,6 +45,7 @@
   response.files.insert(1,URL('static','css/bootstrap.min.css'))
   response.files.insert(2,URL('static','css/bootstrap-responsive.min.css'))
   response.files.insert(3,URL('static','css/web2py_bootstrap.css'))
+  response.files.insert(4,URL('static','css/ccpoa.css'))
   }}
 
   {{include 'web2py_ajax.html'}}
@@ -163,6 +164,6 @@
     'Google Analytics':{trackingId:'{{=response.google_analytics_id}}'}
   });</script>
   {{pass}}
-  <script src="{{=URL('static','js/share.js',vars=dict(static=URL('static','images')))}}"></script>
+<!--  <script src="{{=URL('static','js/share.js',vars=dict(static=URL('static','images')))}}"></script> -->
 </body>
 </html>

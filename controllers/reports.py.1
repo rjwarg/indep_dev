@@ -1,7 +1,6 @@
 # coding: utf8
 # try something like
 import html, datetime
-from gluon.storage import Storage
 
 def index(): return dict(message="hello from reports.py")
 
@@ -57,74 +56,19 @@ def cases_pdf():
     return pdf.output(dest='S')
 
 # list the adverse witnesses
-
 def adv_wit_list():
-#    rows = db.executesql("select A.* , B.username , C.case_number "+
-#                         "from adverse_witness A  "+
-#                         "join auth_user B on b.id = a.assigned_to "+
-#                         "join case_master C on C.id = a.case_id;")
-    rows = db(db.adverse_witness.assigned_to == auth.user.id).select(db.adverse_witness.ALL)
+    rows = db(db.adverse_witness.assigned_to == auth.user.id).select()
     cases = []
-    fieldnames = ['case_number','last_name', 'first_name', 'member_id', 'remarks','counsel', 'case_row_id']
-#    return dict(rows = rows,fieldnames = fieldnames)
     for row in rows:
-        cs = Storage()
-        case= Storage( {'member_id': row.member_id, 
-               'last_name': row.last_name, 
-               'first_name': row.first_name, 
-               'remarks': row.remarks,
-               'counsel': row.assigned_to.username,
-               'case_number': row.case_id.case_number,
-               'case_row_id': row.case_id
-               })
+        case= {'member_id': row.member_id, 'last_name': row.last_name, 'first_name': row.first_name, 'remarks': row.remarks}
+        case['counsel'] = row.assigned_to.username
+        case['case_name'] = db.case_master(row.case_id).case_number
         cases.append(case)
-        
-    return dict(rows = cases, fieldnames = fieldnames )
+    return dict(rows = cases)
 
 def case_rpt():
-     u = auth.user
-     filename = ""
-     title = "Case List"
-     report_type = request.args(0)
-     if request.args(0) == "Active":
-        rows = db((db.case_master.date_closed == None) & (db.case_master.assigned_to == u.id)).select(orderby=~db.case_master.case_number)
-        filename = "active_cases.csv"
-        title = "Active Case List"
-     elif request.args(0) == 'Closed':
-        rows = db((db.case_master.date_closed != None) & (db.case_master.assigned_to == u.id)).select(orderby=~db.case_master.case_number)      
-        filename = "closed_cases.csv"
-        title = "Closed Case List"
-     elif request.args(0) == 'Client':
-        rows = db(db.case_master.assigned_to == u.id).select(orderby=db.case_master.member_id)
-        title = "Case List by Client"
-        filename = "client_cases.csv"        
-     else:
-        rows = db(db.case_master and db.case_master.assigned_to == u.id).select(orderby=~db.case_master.case_number)
-        filename = "all_cases.csv"
-        report_type = "All"
-     
-     fieldnames = ['case_number','member_id', 'member_name','description', 
-                   'date_assigned', 'date_closed', 'dead_file_box_number','counsel', 'case_row_id']
-#    return dict(rows = rows,fieldnames = fieldnames)
-     cases = []
-     for row in rows:
-        cs = Storage()
-        case= Storage( {'member_id': row.member_id, 
-               'member_name': row.member_id.last_name + ', ' + row.member_id.first_name,         
-               'date_assigned': row.date_assigned, 
-               'date_closed': row.date_closed, 
-               'description': row.description,
-               'dead_file_box_number': row.dead_file_box_number,
-               'counsel': row.assigned_to.username,
-               'case_number': row.case_number,
-               'case_row_id': row.id
-               })
-        cases.append(case)
-     case_type ="cases.csv"
-     if request.args(0) == "Client":
-         cases = sorted(cases, key = lambda case: case.member_name)
-     return dict(rows = cases, fieldnames = fieldnames, filename = filename, title = title, report_type = report_type)
-
+    rows = db().select(db.case_master.ALL)
+    return dict(rows = rows)
 
 def action_display():
     u = auth.user
@@ -155,10 +99,8 @@ def action_rpt():
         response.flash = 'Not signed in'
         return locals()
     rows = db(db.case_action.id ).select()
-    to_date = datetime.date.today() 
-    from_date = to_date - datetime.timedelta(30)
-    form = FORM('From Date:', INPUT(_name='from_date', _class='date', widget=SQLFORM.widgets.date.widget, value=from_date, requires=IS_DATE()),
-                'To Date:', INPUT( _name='to_date', _class='date', widget=SQLFORM.widgets.date.widget,value = to_date, requires=IS_DATE()),
+    form = FORM('From Date:', INPUT(_name='from_date', _class='date', widget=SQLFORM.widgets.date.widget, requires=IS_DATE()),
+                'To Date:', INPUT( _name='to_date', _class='date', widget=SQLFORM.widgets.date.widget, requires=IS_DATE()),
                 INPUT(_type ='submit'))  
     if form.accepts(request,session):
         response.flash = 'form accepted '

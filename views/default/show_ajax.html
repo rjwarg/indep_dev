@@ -29,9 +29,13 @@
    <input type='text' id='first_name' name="first_name" class='ajax' style="width: 250px"/>
    <input type='text' id='minst' name="minst" class='ajax' style="width: 250px"/>
     <input type='text' id='id' name="id" style="width: 250px"/><br/>
-    <button type='submit'>Create Case</button>
-    
+    <input type='hidden' id='selection' name='selection' value='{{=path_option}}' />
+    <button type='submit'>{{=button_label}}</button>
+     
 </form>
+
+{{=BEAUTIFY(session._vars)}}
+{{=request.vars.hold}}
 <div style="position: absolute; " id="suggestions" class="suggestions"></div>
 <script>
  

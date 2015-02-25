@@ -14,30 +14,110 @@ import time
 # global client record
 global_client = ""
 
-@auth.requires_membership('indep')
+ 
+@auth.requires_membership('CCPOA Information Technology')
 def index():
     u = auth.user
+   
+   
     response.flash = "who is logged in? " + u.first_name + " " + u.last_name + " " +str( u.id)
     if request.args(0) == None:
-        rows = db((db.case_master.date_closed == None) & (db.case_master.assigned_to == u.id)).select()
+        rows = db((db.case_master.date_closed == None) & (db.case_master.assigned_to == u.id)).select(orderby=~db.case_master.case_number)
         case_type = "Active"
     elif request.args(0) == 'C':
-        rows = db(db.case_master.date_closed != None) & (db.case_master.assigned_to == u.id)).select()      
+        rows = db((db.case_master.date_closed != None) & (db.case_master.assigned_to == u.id)).select(orderby=~db.case_master.case_number)      
         case_type = "Closed"
     else:
-        rows = db(db.case_master and db.case_master.assigned_to == u.id).select()
+        rows = db(db.case_master and db.case_master.assigned_to == u.id).select(orderby=~db.case_master.case_number)
         case_type = "All"
     return locals()
+
+
 @auth.requires_login()
 def get_members():
     members_list = db2(db2.member.name.startswith(request.args[0])).select()
     return locals()
+
 @auth.requires_login()
 def show_ajax():
-    if request.vars.id:
-       response.flash = "Now create a case for this person"
-       redirect(URL('edit_case', args=(request.vars.id, 'new')))
+    if request.vars.id != '':
+        if request.vars.selection == "adv_wit":
+                response.flash = "Add Adverse Witness"
+                redirect(URL('edit_witness', args=(request.vars.id, 'new' )))
+        if request.vars.selection == "case":
+               response.flash = "Now create a case for this person"
+               redirect(URL('edit_case', args=(request.vars.id, 'new')))
+    else:
+        response.flash = "No client was selected. Please try again or go back"
+    path_option = request.vars.path_option
+    if path_option == 'adv_wit':
+        button_label = "Add Witness"
+    else:
+        path_option = 'case'
+        button_label = "Create Case"
     return locals()
+
+def edit_witness_2():
+    '''
+    doc test for edit_witness
+    >>> from gluon.globals import Request
+    >>> request = Request()
+    >>> request.args = ('57921', "new")
+    >>> print request.args
+    ('57921', 'new')
+    >>> edit_witness_2()
+    {retval = 'new'}
+    
+    '''
+    request = Request()
+    retval = request.args(1)
+    return locals()
+
+def edit_witness():
+    
+    adv_wit_record_id = request.args(1)
+    if adv_wit_record_id == 'new':
+        form = SQLFORM(db.adverse_witness)
+        form.vars.member_id = request.args(0)
+#        case_id_name = db.case_master(request.args(0)).case_number
+        form.vars.case_id = session.case_id
+        member = db2.member(request.args(0))
+        form.vars.last_name = member.name
+        form.vars.first_name = member.first_name
+        form.vars.assigned_to = 4
+       
+        hold = [request.args(0),  "new"]
+    else:
+        witness = db.adverse_witness(adv_wit_record_id)
+#        case_id_name = db.case_master(action.case_id).case_number
+        case_id_name = witness.case_id.case_number 
+        form = SQLFORM(db.adverse_witness, witness, deletable=True)
+        
+        hold = [request.args(0), witness.id, "existing"]
+# add a cancel button
+    form.add_button('Cancel', "javascript:void(history.go(-1))")
+    if form.process(session=None, formname='indep').accepted:
+        response.flash = 'form accepted'
+        if request.env.http_referrer:
+            redirect(request.env.http_referrer)
+        else:
+            redirect(URL('edit_case', args=(session.case_id)))
+    elif form.errors:
+        response.flash = 'form has errors'
+    else:
+        response.flash = 'please fill in the form'
+    
+    return locals()
+
+def ttest():
+    ''' 
+    doctest for ttst()
+    >>> name = 'richard'
+    >>> ttest()
+    {'name': 'richard'}
+    '''   
+    name = 'richard'
+    return dict(name=name)
 
 def edit_action():
     db.case_action.action_id.requires = IS_IN_DB(db,'case_action_master.id', '%(action_name)s')
@@ -47,14 +127,15 @@ def edit_action():
         form.vars.case_id = request.args(0)
         case_id_name = db.case_master(request.args(0)).case_number
         form.vars.action_id = request.args(1)
-        hold = [request.args(1), action_id, "new", case_id_name]
+        hold = [request.args(0),  "new", case_id_name]
     else:
         action = db.case_action(action_record_id)
 #        case_id_name = db.case_master(action.case_id).case_number
         case_id_name = action.case_id.case_number 
-        form = SQLFORM(db.case_action, action)
+        form = SQLFORM(db.case_action, action, deletable = True)
         
-        hold = [request.args(1), action, "existing"]
+        hold = [request.args(0), action.id, "existing"]
+    form.add_button('Cancel', "javascript:void(history.go(-1))")
     if form.process(session=None, formname='indep').accepted:
         response.flash = 'form accepted'
         if request.env.http_referrer:
@@ -66,7 +147,7 @@ def edit_action():
     else:
         response.flash = 'please fill in the form'
     
-    client = db.mclient(db.case_master(request.args(1)).member_id)
+    client = db.mclient(db.case_master(request.args(0)).member_id)
     client_name = client.first_name + " " + client.last_name
     return locals()
 
@@ -103,18 +184,22 @@ def edit_case():
 #        client = db(db.client.member_id == request.args(0)).select().first()
         client = insert_client(request.args(0))
         hold = 0
+       
         # insert a new case_action record for the assignment
   
     else:
         rq = request
-        case_number = request.args(0)
-        case = db(db.case_master.case_number == case_number).select().first()
+        case_id = request.args(0)
+        case = db.case_master(case_id)
         client = db.mclient(case.member_id)
         form = SQLFORM(db.case_master, case)
         # get list of actions
         actions = db(db.case_action.case_id == case).select()
-        hold = case.case_number
-        
+        witnesses = db(db.adverse_witness.case_id == case).select()
+#        hold = case.case_number
+        hold = case.id
+        session.case_id = case.id
+    form.add_button('Cancel', "javascript:void(history.go(-1))")    
     if form.process(session=None, formname='indep').accepted:
         response.flash = 'form accepted'
         # if this is a new record then insert a new case_action
@@ -181,7 +266,10 @@ def orig_name_selector():
                        _onmouseover="this.style.backgroundColor='yellow'",
                        _onmouseout="this.style.backgroundColor='white'"
                        ).xml() for k in selected])
-     
+
+def dummy():
+    vals = "this is a test entry"
+    return locals()
 
 def user():
     """
@@ -239,7 +327,7 @@ def new_case_number():
     
  
     suffix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    date_part = date.today().strftime("%Y%m%d")
+    date_part = date.today().strftime("%y%m%d")
     # howmany cases start with this date?
     count = db(db.case_master.case_number.like(date_part +'%')).count()
     return date_part + suffix[count:count+1]

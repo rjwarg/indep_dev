@@ -1,9 +1,28 @@
 {{extend 'layout.html'}}
 <h1>Case Control</h1>
-
+<div class='top'>
+    
 <b>{{=client.first_name + '  '  + client.last_name + ', '+ client.minst}}</b><br/>
 {{=form}}<br/>
+</div>
+<div class='right'>
+    {{=A("Add Adverse Witness", _class='btn', _href=(URL('show_ajax', vars={'path_option':'adv_wit', 'hold': hold} )))}}<br/>
+   {{if hold >0:}}
+    <table>
+        {{for witness in witnesses:}}
+        <tr>
+            <td>{{=witness.id}}</td>
+            <td>{{=A(witness.member_id, _href=(URL('edit_witness', args=(witness.member_id, witness.id))))}} </td>
+            <td>{{=witness.last_name}},</td>
+            <td>{{=witness.first_name}}</td>
+        </tr>
+        {{pass}}
+    </table>
+    {{pass}}
+    </div>
 
+<div class='left'>
+    
 {{if hold >0:}}
 {{=A("Add Action", _class='btn', _href=(URL('edit_action', args=(hold, 0L))))}}
 
@@ -20,3 +39,6 @@
 {{pass}}
 {{pass}}
 </table>
+    </div>
+{{=hold}}
+{{=session.case_number}}

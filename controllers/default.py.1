@@ -40,20 +40,19 @@ def get_members():
 
 @auth.requires_login()
 def show_ajax():
-    if request.vars.id != '':
-        if request.vars.selection == "adv_wit":
-                response.flash = "Add Adverse Witness"
-                redirect(URL('edit_witness', args=(request.vars.id, 'new' )))
-        if request.vars.selection == "case":
-               response.flash = "Now create a case for this person"
-               redirect(URL('edit_case', args=(request.vars.id, 'new')))
-    else:
-        response.flash = "No client was selected. Please try again or go back"
+    if request.vars.id == None:
+        response.flash = "No client was selected"
+        return locals()
+    if request.vars.selection == "adv_wit":
+        response.flash = "Add Adverse Witness"
+        redirect(URL('edit_witness', args=(request.vars.id, 'new' )))
+    if request.vars.selection == "case":
+       response.flash = "Now create a case for this person"
+       redirect(URL('edit_case', args=(request.vars.id, 'new')))
     path_option = request.vars.path_option
     if path_option == 'adv_wit':
         button_label = "Add Witness"
     else:
-        path_option = 'case'
         button_label = "Create Case"
     return locals()
 
@@ -69,7 +68,6 @@ def edit_witness_2():
     {retval = 'new'}
     
     '''
-    request = Request()
     retval = request.args(1)
     return locals()
 

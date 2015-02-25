@@ -2,18 +2,19 @@
 {{=A('Active Cases', _class='btn', _href=(URL('index')))}}
 {{=A('All Cases', _class='btn', _href=(URL('index', args=('A'))))}}
 {{=A('Closed Cases', _class='btn', _href=(URL('index', args=('C'))))}}
-{{=A('PDF Listing', _class='btn', _href=(URL('reports','cases_pdf.pdf')))}}
+<!--{{=A('PDF Listing', _class='btn', _href=(URL('reports','cases_pdf.pdf')))}}
+{{=A('Excel Download', _class='btn', _href=(URL('reports','case_rpt.csv', args=(case_type))))}} -->
 <h2>
     {{= case_type}} cases
 </h2>
-
-{{=A('Create New Case', _class='btn', _href=(URL('show_ajax')))}}
+{{request.vars.action = "A"}}
+{{=A('Create New Case', _class='btn', _href=(URL('show_ajax', vars={'path_option':'case'})))}}
 <table>
 
 {{for row in rows:}}
     <tr>
         
-        <td>{{=A(row.case_number, _href=(URL('edit_case', args=( row.case_number))))}}</td>
+        <td>{{=A(row.case_number, _href=(URL('edit_case', args=( row.id))))}}</td>
         <td>{{=row.member_id.last_name}}</td> 
         <td>{{=row.member_id.first_name}}</td>
         <td>{{=row.description}}</td>
