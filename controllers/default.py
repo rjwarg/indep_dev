@@ -48,9 +48,13 @@ def show_ajax():
                response.flash = "Now create a case for this person"
                redirect(URL('edit_case', args=(request.vars.id, 'new')))
     else:
-        response.flash = "No client was selected. Please try again or go back"
-    path_option = request.vars.path_option
-    if path_option == 'adv_wit':
+        response.flash = "No client was selected. Please try again or go back. " + request.vars.selection
+        
+    if request.vars.path_option:
+        path_option = request.vars.path_option
+    elif request.vars.selection:
+        path_option = request.vars.selection
+    if path_option == 'adv_wit' :
         button_label = "Add Witness"
     else:
         path_option = 'case'
@@ -127,6 +131,7 @@ def edit_action():
         form.vars.case_id = request.args(0)
         case_id_name = db.case_master(request.args(0)).case_number
         form.vars.action_id = request.args(1)
+        form.vars.date_performed = date.today()
         hold = [request.args(0),  "new", case_id_name]
     else:
         action = db.case_action(action_record_id)
@@ -179,6 +184,7 @@ def edit_case():
         form = SQLFORM(db.case_master)
         form.vars.case_number = case_number
         form.vars.member_id = request.args(0)
+        form.vars.date_assigned = date.today()
         form.vars.assigned_to = auth.user.id
 #        client = db.client( request.args(0))
 #        client = db(db.client.member_id == request.args(0)).select().first()

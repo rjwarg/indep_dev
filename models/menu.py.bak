@@ -7,8 +7,9 @@
 
 #response.logo = A(B('web',SPAN(2),'py'),XML('&trade;&nbsp;'),
 #                  _class="brand",_href="http://www.web2py.com/")
-response.title = request.application.replace('_',' ').title()
-response.subtitle = ''
+# response.title = request.application.replace('_','INDEP ').title()
+response.title = "Independent Counsel"
+response.subtitle = 'CCPOA Legal'
 
 ## read more at http://dev.w3.org/html5/markup/meta.name.html
 response.meta.author = 'Your Name <you@example.com>'
@@ -33,8 +34,8 @@ response.menu = [
             ('All', False, URL('reports','case_rpt', args=('All')), []),
             ('By Client',False,URL('reports','case_rpt', args=('Client')),[])
          ]),     
-         ('activity by date', False, URL('reports', 'action_rpt'),[]),
-         ('adverse witnesses', False, URL('reports', 'adv_wit_list'),[])
+         ('Activity by Date', False, URL('reports', 'action_rpt'),[]),
+         ('Adverse Witnesses', False, URL('reports', 'adv_wit_list'),[])
 ])
 ]
 

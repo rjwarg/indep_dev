@@ -140,7 +140,7 @@ def action_display():
     query &= (db.case_action.case_id == db.case_master.id) 
     query &= (db.case_master.assigned_to == u.id)
     rows =  db(query).select(db.case_action.ALL)# orderby=db.case_action.case_id)
-
+    filename = "actions.csv"
 #    rows = []
 #    for r in rows_a:
 #        if r.case_id.assigned_to == u.id:

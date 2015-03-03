@@ -25,12 +25,12 @@
 </button>
 
 <form action=''>
-   <input type='text' id='last_name' name="last_name" class='ajax' style="width: 250px"/>
-   <input type='text' id='first_name' name="first_name" class='ajax' style="width: 250px"/>
+   <input type='text' autocomplete='off' id='last_name' name="last_name" class='ajax' style="width: 250px"/>
+   <input type='text'  autocomplete='off' id='first_name' name="first_name" class='ajax' style="width: 250px"/>
    <input type='text' id='minst' name="minst" class='ajax' style="width: 250px"/>
-    <input type='text' id='id' name="id" style="width: 250px"/><br/>
-    <input type='hidden' id='selection' name='selection' value='{{=path_option}}' />
-    <button type='submit'>{{=button_label}}</button>
+   <input type='text' id='id' name="id" style="width: 250px"/><br/>
+   <input type='hidden' id='selection' name='selection' value='{{=path_option}}' />
+   <button type='submit'>{{=button_label}}</button>
      
 </form>
 

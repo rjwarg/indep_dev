@@ -7,8 +7,9 @@
 
 #response.logo = A(B('web',SPAN(2),'py'),XML('&trade;&nbsp;'),
 #                  _class="brand",_href="http://www.web2py.com/")
-response.title = request.application.replace('_',' ').title()
-response.subtitle = ''
+# response.title = request.application.replace('_','INDEP ').title()
+response.title = "Independent Counsel"
+response.subtitle = 'CCPOA Legal'
 
 ## read more at http://dev.w3.org/html5/markup/meta.name.html
 response.meta.author = 'Your Name <you@example.com>'
@@ -21,7 +22,7 @@ response.google_analytics_id = None
 #########################################################################
 ## this is the main application menu add/remove items as required
 #########################################################################
-
+DEVELOPMENT_MENU = True
 response.menu = [
     (T('Home'), False, URL('default', 'index'), []),
     (T('Reports'), False, '', 
@@ -38,7 +39,7 @@ response.menu = [
 ])
 ]
 
-DEVELOPMENT_MENU = True
+
 
 #########################################################################
 ## provide shortcuts for development. remove in production
