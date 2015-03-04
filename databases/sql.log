@@ -572,3 +572,21 @@ ALTER TABLE adverse_witness DROP COLUMN case_action_id;
 timestamp: 2015-02-10T14:32:00.631792
 ALTER TABLE adverse_witness DROP COLUMN case_action_id;
 success!
+timestamp: 2015-03-04T07:43:21.119521
+ALTER TABLE adverse_witness DROP COLUMN assigned_to;
+faked!
+success!
+timestamp: 2015-03-04T07:49:22.497608
+ALTER TABLE adverse_witness ADD assigned_to INT NULL; ALTER TABLE adverse_witness ADD CONSTRAINT adverse_witness_assigned_to__constraint FOREIGN KEY (assigned_to) REFERENCES auth_user (id) ON DELETE CASCADE;
+faked!
+success!
+timestamp: 2015-03-04T07:49:22.506413
+CREATE TABLE adv_wit(
+    id INT IDENTITY PRIMARY KEY,
+    case_id INT NULL, CONSTRAINT adv_wit_case_id__constraint FOREIGN KEY (case_id) REFERENCES case_master (id) ON DELETE NO ACTION,
+    member_id INT NULL,
+    first_name VARCHAR(512) NULL,
+    last_name VARCHAR(512) NULL,
+    remarks VARCHAR(512) NULL
+);
+success!

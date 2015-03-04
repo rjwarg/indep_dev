@@ -49,7 +49,8 @@ db.define_table('adverse_witness',
                 Field('first_name'),
                 Field('last_name'),
                 Field('remarks'),
-                Field('assigned_to', 'reference auth_user')
+#                Field('assigned_to', 'reference auth_user'),
+                fake_migrate = True
                 )
 
 db2.define_table('member',

@@ -81,21 +81,21 @@ def edit_witness():
     
     adv_wit_record_id = request.args(1)
     if adv_wit_record_id == 'new':
-        form = SQLFORM(db.adverse_witness)
+        form = SQLFORM(db.adv_wit)
         form.vars.member_id = request.args(0)
 #        case_id_name = db.case_master(request.args(0)).case_number
         form.vars.case_id = session.case_id
         member = db2.member(request.args(0))
         form.vars.last_name = member.name
         form.vars.first_name = member.first_name
-        form.vars.assigned_to = 4
+#        form.vars.assigned_to = 4
        
         hold = [request.args(0),  "new"]
     else:
-        witness = db.adverse_witness(adv_wit_record_id)
-#        case_id_name = db.case_master(action.case_id).case_number
-        case_id_name = witness.case_id.case_number 
-        form = SQLFORM(db.adverse_witness, witness, deletable=True)
+        witness = db.adv_wit(adv_wit_record_id)
+        case_id_name = db.case_master(witness.case_id).case_number
+#        case_id_name = witness.case_id.case_number 
+        form = SQLFORM(db.adv_wit, witness, deletable=True)
         
         hold = [request.args(0), witness.id, "existing"]
 # add a cancel button
@@ -201,7 +201,7 @@ def edit_case():
         form = SQLFORM(db.case_master, case)
         # get list of actions
         actions = db(db.case_action.case_id == case).select()
-        witnesses = db(db.adverse_witness.case_id == case).select()
+        witnesses = db(db.adv_wit.case_id == case).select()
 #        hold = case.case_number
         hold = case.id
         session.case_id = case.id

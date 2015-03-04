@@ -58,7 +58,7 @@ def cases_pdf():
 
 # list the adverse witnesses
 
-def adv_wit_list():
+def adv_wit_list_B():
 #    rows = db.executesql("select A.* , B.username , C.case_number "+
 #                         "from adverse_witness A  "+
 #                         "join auth_user B on b.id = a.assigned_to "+
@@ -78,9 +78,38 @@ def adv_wit_list():
                'case_row_id': row.case_id
                })
         cases.append(case)
-        
-    return dict(rows = cases, fieldnames = fieldnames )
+    return response.render("reports/adv_wit_list.html",    dict(rows = cases, fieldnames = fieldnames ))
+#    return dict(rows = cases, fieldnames = fieldnames )
 
+
+def adv_wit_list():
+    rows = db.executesql("select A.* , B.username , C.case_number, C.assigned_to "+
+                         "from adv_wit A  "+
+                         "join case_master C on C.id = a.case_id "+
+                         "join auth_user B on b.id = C.assigned_to "+
+                         "where C.assigned_to = " + str( auth.user.id) +
+                         " order by last_name;" )
+                         
+#    rows = db(db.adv_wit).select()
+    cases = []
+    fieldnames = ['case_number','last_name', 'first_name', 'member_id', 'remarks','counsel', 'case_row_id']
+#    return dict(rows = rows,fieldnames = fieldnames)
+    for row in rows:
+        cs = Storage()
+       
+        case= Storage( {'member_id': row.member_id, 
+               'last_name': row.last_name, 
+               'first_name': row.first_name, 
+               'remarks': row.remarks,
+               'counsel': row.username,
+               'case_number': row.case_number,
+               'case_row_id': row.case_id,
+               'assigned_to': row.assigned_to,
+               'user_type': auth.user.id
+               })
+        cases.append(case)
+    return response.render("reports/adv_wit_list.html",    dict(rows = cases, fieldnames = fieldnames ))
+#    return dict(rows = cases, fieldnames = fieldnames )
 def case_rpt():
      u = auth.user
      filename = ""
