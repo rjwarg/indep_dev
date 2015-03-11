@@ -4,9 +4,10 @@ import csv
 stream=cStringIO.StringIO()
 writer = csv.DictWriter(stream, fieldnames=fieldnames)
 writer.writeheader()
-for r in rows:
+for r in cases:
     writer.writerow(r)
 pass
 response.headers['Content-Type']='application/vnd.ms-excel'
+response.headers['Content-disposition']='attachement; filename= ' + filename
 response.write(stream.getvalue(), escape=False)
 }}

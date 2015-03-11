@@ -92,6 +92,7 @@ def adv_wit_list():
                          
 #    rows = db(db.adv_wit).select()
     cases = []
+    filename = 'adv_wit.csv'
     fieldnames = ['case_number','last_name', 'first_name', 'member_id', 'remarks','counsel', 'case_row_id']
 #    return dict(rows = rows,fieldnames = fieldnames)
     for row in rows:
@@ -104,12 +105,15 @@ def adv_wit_list():
                'counsel': row.username,
                'case_number': row.case_number,
                'case_row_id': row.case_id,
-               'assigned_to': row.assigned_to,
-               'user_type': auth.user.id
+#               'assigned_to': row.assigned_to,
+#               'user_type': auth.user.id
                })
         cases.append(case)
-    return response.render("reports/adv_wit_list.html",    dict(rows = cases, fieldnames = fieldnames ))
+#    return   locals()
+    return  dict(cases=cases, fieldnames=fieldnames, filename=filename)
 #    return dict(rows = cases, fieldnames = fieldnames )
+
+
 def case_rpt():
      u = auth.user
      filename = ""
@@ -168,12 +172,22 @@ def action_display():
     query &= db.case_action.date_performed <= td
     query &= (db.case_action.case_id == db.case_master.id) 
     query &= (db.case_master.assigned_to == u.id)
-    rows =  db(query).select(db.case_action.ALL)# orderby=db.case_action.case_id)
+    rows_a =  db(query).select(db.case_action.ALL)# orderby=db.case_action.case_id)
     filename = "actions.csv"
-#    rows = []
-#    for r in rows_a:
-#        if r.case_id.assigned_to == u.id:
-#            rows.append(r)
+    rows = []
+    fieldnames = ['case_number','last_name', 'action', 'date_performed', 'remarks','counsel', 'case_id']
+    
+    for r in rows_a:
+        if r.case_id.assigned_to == u.id:
+            action = Storage({'case_number': r.case_id.case_number,
+                              'last_name': r.case_id.member_id.last_name,
+                              'action': r.action_id.action_name,
+                              'date_performed': r.date_performed,
+                              'remarks': r.remarks,
+                              'counsel': r.case_id.assigned_to.username,
+                              'case_id': r.case_id
+                              })
+            rows.append(action)
             
     response.title = "Indep Counsel"
     return locals()
