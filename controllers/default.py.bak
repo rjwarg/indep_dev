@@ -140,7 +140,7 @@ def edit_action():
         form = SQLFORM(db.case_action, action, deletable = True)
         
         hold = [request.args(0), action.id, "existing"]
-    form.add_button('Cancel', "javascript:void(history.go(-1))")
+    form.add_button('Cancel', URL("edit_case", args=(request.args(0))))
     if form.process(session=None, formname='indep').accepted:
         response.flash = 'form accepted'
         if request.env.http_referrer:
@@ -201,7 +201,7 @@ def edit_case():
         form = SQLFORM(db.case_master, case)
         # get list of actions
         actions = db(db.case_action.case_id == case).select()
-        witnesses = db(db.adverse_witness.case_id == case).select()
+        witnesses = db(db.adv_wit.case_id == case).select()
 #        hold = case.case_number
         hold = case.id
         session.case_id = case.id

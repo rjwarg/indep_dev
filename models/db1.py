@@ -50,7 +50,7 @@ db.define_table('adverse_witness',
                 Field('last_name'),
                 Field('remarks'),
                 Field('assigned_to', 'reference auth_user'),
-                fake_migrate = True
+                migrate = True
                 )
 
 db.define_table('adv_wit',

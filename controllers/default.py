@@ -99,7 +99,7 @@ def edit_witness():
         
         hold = [request.args(0), witness.id, "existing"]
 # add a cancel button
-    form.add_button('Cancel', "javascript:void(history.go(-1))")
+    form.add_button('Cancel', URL('edit_case', args=(session.case_id)))
     if form.process(session=None, formname='indep').accepted:
         response.flash = 'form accepted'
         if request.env.http_referrer:
@@ -140,7 +140,7 @@ def edit_action():
         form = SQLFORM(db.case_action, action, deletable = True)
         
         hold = [request.args(0), action.id, "existing"]
-    form.add_button('Cancel', "javascript:void(history.go(-1))")
+    form.add_button('Cancel', URL("edit_case", args=(request.args(0))))
     if form.process(session=None, formname='indep').accepted:
         response.flash = 'form accepted'
         if request.env.http_referrer:
