@@ -175,13 +175,14 @@ def action_display():
     rows_a =  db(query).select(db.case_action.ALL)# orderby=db.case_action.case_id)
     filename = "actions.csv"
     rows = []
-    fieldnames = ['case_number','last_name', 'action', 'date_performed', 'remarks','counsel', 'case_id']
+    fieldnames = ['case_number','last_name', 'action', 'detail','date_performed', 'remarks','counsel', 'case_id']
     
     for r in rows_a:
         if r.case_id.assigned_to == u.id:
             action = Storage({'case_number': r.case_id.case_number,
                               'last_name': r.case_id.member_id.last_name,
                               'action': r.action_id.action_name,
+                              'detail' : r.action_id.sub_action,
                               'date_performed': r.date_performed,
                               'remarks': r.remarks,
                               'counsel': r.case_id.assigned_to.username,
@@ -191,7 +192,7 @@ def action_display():
             
     response.title = "Indep Counsel"
     return locals()
-
+@auth.requires_login()
 def action_rpt():
     u = auth.user
     if  u is None:
@@ -200,9 +201,17 @@ def action_rpt():
     rows = db(db.case_action.id ).select()
     to_date = datetime.date.today() 
     from_date = to_date - datetime.timedelta(30)
-    form = FORM('From Date:', INPUT(_name='from_date', _class='date', widget=SQLFORM.widgets.date.widget, value=from_date, requires=IS_DATE()),
-                'To Date:', INPUT( _name='to_date', _class='date', widget=SQLFORM.widgets.date.widget,value = to_date, requires=IS_DATE()),
-                INPUT(_type ='submit'))  
+    try:
+        form = FORM('From Date:', 
+                    INPUT(_name='from_date', _class='date', widget=SQLFORM.widgets.date.widget, value=from_date, requires=IS_DATE()),
+                    'To Date:', 
+                    INPUT( _name='to_date', _class='date', widget=SQLFORM.widgets.date.widget,value = to_date, requires=IS_DATE()),
+                    INPUT(_type ='submit')
+                    )
+    except:
+        response.flash = "Bad form"
+        
+    
     if form.accepts(request,session):
         response.flash = 'form accepted '
         redirect(URL('action_display', args=(request.vars.from_date, request.vars.to_date)))

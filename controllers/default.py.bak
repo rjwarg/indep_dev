@@ -99,7 +99,7 @@ def edit_witness():
         
         hold = [request.args(0), witness.id, "existing"]
 # add a cancel button
-    form.add_button('Cancel', "javascript:void(history.go(-1))")
+    form.add_button('Cancel', URL('edit_case', args=(session.case_id)))
     if form.process(session=None, formname='indep').accepted:
         response.flash = 'form accepted'
         if request.env.http_referrer:
@@ -124,7 +124,7 @@ def ttest():
     return dict(name=name)
 
 def edit_action():
-    db.case_action.action_id.requires = IS_IN_DB(db,'case_action_master.id', '%(action_name)s')
+    db.case_action.action_id.requires = IS_IN_DB(db,'case_action_master.id', '%(action_name)s' '  ' '%(sub_action)s')
     action_record_id = request.args(1)
     if action_record_id == '0':
         form = SQLFORM(db.case_action)
@@ -132,13 +132,14 @@ def edit_action():
         case_id_name = db.case_master(request.args(0)).case_number
         form.vars.action_id = request.args(1)
         form.vars.date_performed = date.today()
+        form.element('select[name=action_id]')['_style']='width:400px'
         hold = [request.args(0),  "new", case_id_name]
     else:
         action = db.case_action(action_record_id)
 #        case_id_name = db.case_master(action.case_id).case_number
         case_id_name = action.case_id.case_number 
         form = SQLFORM(db.case_action, action, deletable = True)
-        
+        form.element('select[name=action_id]')['_style']='width:400px'
         hold = [request.args(0), action.id, "existing"]
     form.add_button('Cancel', URL("edit_case", args=(request.args(0))))
     if form.process(session=None, formname='indep').accepted:

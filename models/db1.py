@@ -14,6 +14,7 @@ db.define_table('mclient',
 
 db.define_table('case_action_master',
                 Field('action_name'),
+                Field('sub_action'),
                 Field('action_value'),
  #               auth.signature,
                 migrate = False
@@ -42,6 +43,7 @@ db.define_table('case_action',
  #               auth.signature,
                 migrate = False
  )
+db.case_action.action_id.requires = IS_IN_DB(db, 'case_action_master.id', '%(action_name)s'  '%(sub_action)s')
 
 db.define_table('adverse_witness',
                 Field('case_id', 'reference case_master', ondelete='NO ACTION'),

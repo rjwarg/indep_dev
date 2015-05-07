@@ -9,12 +9,13 @@ From: <b>{{=fd}} </b> To: <b>{{=td}}</b>
 <br/>
 {{=A("Download To Excel", _href=URL("action_display.csv", args=(fd, td)))}}
 <table border='true'>
-    <tr><th>Case Number</th><th>Client Name</th><th>Action</th><th>Date Performed</th><th>Remarks</th><th>Owner</th></tr>
+    <tr><th>Case Number</th><th>Client Name</th><th>Action</th><th>Detail</th><th>Date Performed</th><th>Remarks</th><th>Owner</th></tr>
 {{ for r in rows:}}
     <tr>
         <td>{{=A(r.case_number, _href=(URL('default','edit_case', args=( r.case_id, r.case_id))))}}</td>
         <td>{{=r.last_name}}</td>
         <td>{{=r.action}}</td>
+        <td>{{=r.detail}}</td>
         <td>{{=r.date_performed}}</td>
         <td>{{=r.remarks}}</td>
         <td>{{=r.counsel}}</td>
